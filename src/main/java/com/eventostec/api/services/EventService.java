@@ -28,6 +28,7 @@ public class EventService {
     }
 
     private String uploadImg(MultipartFile multipartFile){
+        
         return "";
     }
 }
