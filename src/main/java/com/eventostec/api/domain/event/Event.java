@@ -6,7 +6,7 @@ import lombok.*;
 import java.util.Date;
 import java.util.UUID;
 
-@Table(name = "events")
+@Table(name = "event")
 @Entity
 @Setter
 @Getter
@@ -20,7 +20,7 @@ public class Event {
 
     private String title;
 
-    private String desciption;
+    private String description;
 
     private String imgUrl;
 
