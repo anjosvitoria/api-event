@@ -13,13 +13,29 @@ public class AWSConfig {
     @Value("${aws.region}")
     private String awsRegion;
 
+//    @Bean
+//    public AmazonS3 createS3Instance(){
+//        return AmazonS3ClientBuilder
+//                .standard()
+//                .withCredentials(DefaultAWSCredentialsProviderChain.getInstance())
+//                .withRegion(awsRegion)
+//                .build();
+//
+//    }
+//    @Bean
+//    public AmazonS3 createS3Instance(){
+//        return AmazonS3ClientBuilder
+//                .standard()
+//                .withRegion(awsRegion)
+//                .build();
+//    }
+
     @Bean
     public AmazonS3 createS3Instance(){
-        return AmazonS3ClientBuilder
-                .standard()
-                .withCredentials(new DefaultAWSCredentialsProviderChain())
-                .withRegion(awsRegion)
+        return AmazonS3ClientBuilder.standard()
+                .withRegion("us-east-1")
+                .withPathStyleAccessEnabled(true)
                 .build();
-
     }
+
 }

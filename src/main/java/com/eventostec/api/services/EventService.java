@@ -46,20 +46,34 @@ public class EventService {
     }
 
     public String uploadImgBase64(String base64Image, String fileName) {
+        if (base64Image.contains(",")) {
+            base64Image = base64Image.split(",")[1];
+        }
+
         try {
             byte[] decodedBytes = java.util.Base64.getDecoder().decode(base64Image);
-            File tempFile = File.createTempFile("upload", fileName);
+            String extension = fileName.substring(fileName.lastIndexOf("."));
+            File tempFile = File.createTempFile("upload-", extension);
             try (FileOutputStream fos = new FileOutputStream(tempFile)) {
                 fos.write(decodedBytes);
             }
-            s3Client.putObject(bucketName, fileName, tempFile);
+
+            System.out.println("Bucket: " + bucketName);
+            System.out.println("Key: " + fileName);
+            System.out.println(s3Client.doesBucketExistV2("eventostec-imagens-730335432878-us-east-1-an"));
+
+            String cleanFileName = System.currentTimeMillis() + "-" +
+                    fileName.substring(fileName.lastIndexOf("/") + 1);
+            s3Client.putObject(bucketName, cleanFileName, tempFile);
             if (!tempFile.delete()) {
                 System.out.println("Falha ao excluir o arquivo temporário:: " + tempFile.getAbsolutePath());
             }
-            return s3Client.getUrl(bucketName, fileName).toString();
+            return s3Client.getUrl(bucketName, cleanFileName).toString();
         } catch (IOException e) {
             System.out.println("Erro ao processar a imagem Base64: " + e.getMessage());
             return null;
         }
     }
+
+
 }
