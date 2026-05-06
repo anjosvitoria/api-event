@@ -2,10 +2,13 @@ package com.eventostec.api.controller;
 
 import com.eventostec.api.domain.event.Event;
 import com.eventostec.api.domain.event.EventRequestDTO;
+import com.eventostec.api.domain.event.EventResponseDto;
 import com.eventostec.api.services.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/event")
@@ -21,5 +24,12 @@ public class EventController {
 
         Event newEvent = eventService.createEvent(eventRequestDTO);
         return ResponseEntity.ok(newEvent);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<EventResponseDto>> getEvents(@RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "10") int size) {
+        List<EventResponseDto> events = eventService.getAllEvents(page, size);
+        return ResponseEntity.ok(events);
     }
 }

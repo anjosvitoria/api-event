@@ -3,15 +3,20 @@ package com.eventostec.api.services;
 import com.amazonaws.services.s3.AmazonS3;
 import com.eventostec.api.domain.event.Event;
 import com.eventostec.api.domain.event.EventRequestDTO;
+import com.eventostec.api.domain.event.EventResponseDto;
 import com.eventostec.api.repositories.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class EventService {
@@ -75,5 +80,9 @@ public class EventService {
         }
     }
 
-
+    public List<EventResponseDto>getAllEvents(int page, int size){
+        Pageable pageable  = PageRequest.of(page, size);
+        Page<Event> events = repository.findAll(pageable);
+        return events.stream().map(Event -> new EventResponseDto(Event.getId(), Event.getTitle(), Event.getDescription(), Event.getDate(), "", "", Event.getRemote(), Event.getEventUrl(), Event.getImgUrl())).toList();
+    }
 }

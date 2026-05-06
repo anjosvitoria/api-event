@@ -13,12 +13,12 @@ import java.util.UUID;
 @Service
 public class CouponService {
 
+    @Autowired
     private CouponRepository couponRepository;
 
     @Autowired
     private EventRepository eventRepository;
 
-    @Autowired
     public Coupon addCouponToEvent(UUID eventID, CouponRequestDTO couponRequestDTO) {
         Event event = eventRepository.findById(eventID).orElseThrow(() -> new RuntimeException("Evento não encontrado"));
 
