@@ -1,5 +1,6 @@
 package com.eventostec.api.domain.event;
 
+import com.eventostec.api.domain.address.Address;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -8,6 +9,7 @@ import java.util.UUID;
 
 @Table(name = "event")
 @Entity
+@Data
 @Setter
 @Getter
 @NoArgsConstructor
@@ -29,4 +31,7 @@ public class Event {
     private Boolean remote;
 
     private Date date;
+
+    @OneToOne(mappedBy = "event", cascade = CascadeType.ALL)
+    private Address address;
 }

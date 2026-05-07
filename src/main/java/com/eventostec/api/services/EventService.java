@@ -30,6 +30,8 @@ public class EventService {
     @Autowired
     private EventRepository repository;
 
+    private AdressService addressService;
+
     public Event createEvent(EventRequestDTO data){
         String imgUrl = "url-padrao-da-imagem"; // Valor padrão para imgUrl
 
@@ -46,6 +48,10 @@ public class EventService {
         newEvent.setRemote(data.remote());
 
         repository.save(newEvent);
+
+        if(!data.remote()){
+            addressService.createAddress(data, newEvent);
+        }
 
         return newEvent;
     }
@@ -85,4 +91,12 @@ public class EventService {
         Page<Event> events = repository.findUpcomingEvents(new Date(), pageable);
         return events.stream().map(Event -> new EventResponseDto(Event.getId(), Event.getTitle(), Event.getDescription(), Event.getDate(), "", "", Event.getRemote(), Event.getEventUrl(), Event.getImgUrl())).toList();
     }
+
+    public List<EventResponseDto>getFilteredEvents(int page, int size, String title, String city, String uf, Date startDate, Date endDate){
+        Pageable pageable  = PageRequest.of(page, size);
+        Page<Event> events = repository.findFilteredEvents(new Date(), title, city, uf, startDate, endDate, pageable);
+        return events.stream().map(Event -> new EventResponseDto(Event.getId(), Event.getTitle(), Event.getDescription(), Event.getDate(), "", "", Event.getRemote(), Event.getEventUrl(), Event.getImgUrl())).toList();
+    }
+
+
 }
