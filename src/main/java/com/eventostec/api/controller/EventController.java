@@ -5,6 +5,7 @@ import com.eventostec.api.domain.event.EventRequestDTO;
 import com.eventostec.api.domain.event.EventResponseDto;
 import com.eventostec.api.services.EventService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,14 +39,13 @@ public class EventController {
     @GetMapping("/filter")
     public ResponseEntity<List<EventResponseDto>> getFilteredEvents(@RequestParam(defaultValue = "0") int page,
                                                                     @RequestParam(defaultValue = "10") int size,
+                                                                    @RequestParam(required = false) String title,
                                                                     @RequestParam String city,
                                                                     @RequestParam String uf,
                                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
                                                                     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
-        List<EventResponseDto> events = eventService.getFilteredEvents(page, size, city, uf, startDate, endDate);
+        List<EventResponseDto> events = eventService.getFilteredEvents(page, size, title, city, uf, startDate, endDate);
         return ResponseEntity.ok(events);
     }
-
-
 
 }
