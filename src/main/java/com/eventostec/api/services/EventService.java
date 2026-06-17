@@ -89,13 +89,37 @@ public class EventService {
     public List<EventResponseDto>getUpcomingEvents(int page, int size){
         Pageable pageable  = PageRequest.of(page, size);
         Page<Event> events = repository.findUpcomingEvents(new Date(), pageable);
-        return events.stream().map(Event -> new EventResponseDto(Event.getId(), Event.getTitle(), Event.getDescription(), Event.getDate(), "", "", Event.getRemote(), Event.getEventUrl(), Event.getImgUrl())).toList();
+        return events.stream().map(Event -> new EventResponseDto(
+                Event.getId(),
+                Event.getTitle(),
+                Event.getDescription(),
+                Event.getDate(),
+                Event.getAddress() != null ? Event.getAddress().getCity() : "",
+                Event.getAddress() != null ? Event.getAddress().getUf() : "",
+                Event.getRemote(),
+                Event.getEventUrl(),
+                Event.getImgUrl())).toList();
     }
 
     public List<EventResponseDto>getFilteredEvents(int page, int size, String title, String city, String uf, Date startDate, Date endDate){
+        title = (title != null) ? title : "";
+        city = (city != null) ? city : "";
+        uf = (uf != null) ? uf : "";
+        startDate = (startDate !=null) ? startDate : new Date(0);
+        endDate = (endDate !=null) ? endDate : new Date();
+
         Pageable pageable  = PageRequest.of(page, size);
-        Page<Event> events = repository.findFilteredEvents(new Date(), title, city, uf, startDate, endDate, pageable);
-        return events.stream().map(Event -> new EventResponseDto(Event.getId(), Event.getTitle(), Event.getDescription(), Event.getDate(), "", "", Event.getRemote(), Event.getEventUrl(), Event.getImgUrl())).toList();
+        Page<Event> events = repository.findFilteredEvents(title, city, uf, startDate, endDate, pageable);
+        return events.stream().map(Event -> new EventResponseDto(
+                Event.getId(),
+                Event.getTitle(),
+                Event.getDescription(),
+                Event.getDate(),
+                Event.getAddress() != null ? Event.getAddress().getCity() : "",
+                Event.getAddress() != null ? Event.getAddress().getUf() : "",
+                Event.getRemote(),
+                Event.getEventUrl(),
+                Event.getImgUrl())).toList();
     }
 
 

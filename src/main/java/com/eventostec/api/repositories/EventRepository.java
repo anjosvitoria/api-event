@@ -17,14 +17,12 @@ public interface EventRepository extends JpaRepository<Event, UUID> {
 
     @Query("SELECT e FROM Event e " +
             "LEFT JOIN e.address a" +
-            " WHERE e.date > :currentDate AND " +
             "(:title IS NULL OR e.title LIKE %:title%) AND " +
             "(:city IS NULL OR a.city LIKE %:city%) AND " +
             "(:uf IS NULL OR a.uf LIKE %:uf%) AND " +
             "(:startDate IS NULL OR e.date >= :startDate) AND " +
             "(:endDate IS NULL OR e.date <= :endDate)")
-    Page<Event> findFilteredEvents(@Param("currentDate") Date currentDate,
-                                   @Param("title") String title,
+    Page<Event> findFilteredEvents(@Param("title") String title,
                                    @Param("city") String city,
                                    @Param("uf") String uf,
                                    @Param("startDate") Date startDate,
